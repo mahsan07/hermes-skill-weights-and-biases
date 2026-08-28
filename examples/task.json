@@ -1,0 +1,3 @@
+{
+  "task": "Use Weights & Biases to log ml experiments, run sweeps, manage a model registry, and build w&b dashboards and return verification evidence."
+}

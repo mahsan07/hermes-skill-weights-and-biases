@@ -1,0 +1,85 @@
+{
+  "protocol_version": "0.1",
+  "skill": {
+    "id": "hermes-skill-weights-and-biases",
+    "display_name": "Weights & Biases",
+    "description": "Log ML experiments, run sweeps, manage a model registry, and build W&B dashboards."
+  },
+  "task_profile": {
+    "category": "integration",
+    "architecture": "hub",
+    "artifact": "dashboard",
+    "inputs": [
+      "Training script",
+      "Run metrics and artifacts"
+    ],
+    "outputs": [
+      "Experiment dashboard",
+      "Run train-042",
+      "Loss 0.184",
+      "Artifact v7",
+      "Registry: candidate"
+    ]
+  },
+  "modules": {
+    "memory": {
+      "strategy": "resource_state_registry",
+      "responsibility": "Retain training script plus decisions, observations, and verification evidence needed to resume safely."
+    },
+    "planning": {
+      "strategy": "resource_orchestration_plan",
+      "responsibility": "Transform run metrics and artifacts into the ordered, bounded stages defined by this skill."
+    },
+    "action": {
+      "strategy": "inspect_preview_authorize_execute_reread",
+      "responsibility": "Advance the workflow through w&b tracking server while preserving stop conditions and user authority."
+    },
+    "capability": {
+      "strategy": "task_conditioned_minimum_capability_set",
+      "responsibility": "Expose the minimum service operations required for the requested target; writes require an explicit preview gate."
+    }
+  },
+  "execution": {
+    "stages": [
+      "Define project run names and config",
+      "Instrument metrics tables and artifacts",
+      "Launch a bounded tracked experiment",
+      "Compare runs or execute a sweep",
+      "Promote only validated model versions",
+      "Verify dashboard and artifact lineage"
+    ],
+    "gates": [
+      "scope_and_authority_confirmed",
+      "capability_and_dependency_preflight",
+      "consequential_action_previewed_when_applicable",
+      "output_reopened_and_verified"
+    ]
+  },
+  "verification": {
+    "evidence": [
+      "Run train-042",
+      "Loss 0.184",
+      "Artifact v7",
+      "Registry: candidate"
+    ],
+    "metrics": [
+      "task_success",
+      "verification_pass_rate",
+      "tool_error_rate",
+      "repair_count",
+      "latency_ms",
+      "estimated_cost_usd"
+    ]
+  },
+  "failure_policy": {
+    "max_repairs": 2,
+    "schema_error": "repair_then_stop",
+    "permission_error": "stop_without_retry",
+    "verification_failure": "report_incomplete"
+  },
+  "maturity": {
+    "level": "executable_contract",
+    "runtime_scope": "validation_and_dry_run_planning",
+    "claim_boundary": "This repository validates and plans the harness contract; it does not claim live service execution or benchmark gains without a connected adapter and measured evidence."
+  }
+}
